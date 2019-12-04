@@ -41,7 +41,6 @@ public class RegistroController {
         } else {
             Conta contaCad = new Conta();
             contaCad.setTitular(conta.getTitular());
-            contaCad.setBanco(conta.getBanco());
             contaCad.setAgencia(conta.getAgencia());
             contaCad.setNumero(conta.getNumero());
             contaCad.setEmail(conta.getEmail());

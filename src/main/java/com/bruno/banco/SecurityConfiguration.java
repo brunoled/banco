@@ -44,7 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/server-location").permitAll()
+                .antMatchers("/contas").permitAll()
+                .antMatchers("/contas_json/**").permitAll()
                 .antMatchers("/login").anonymous()
                 .antMatchers("/criar-conta").anonymous()
                 .antMatchers("/conta/**").hasAuthority("ROLE_USER").anyRequest()

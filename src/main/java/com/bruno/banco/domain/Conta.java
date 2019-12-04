@@ -38,12 +38,6 @@ public class Conta {
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-	public String getBanco() {
-		return banco;
-	}
-	public void setBanco(String banco) {
-		this.banco = banco;
-	}
 	public String getAgencia() {
 		return agencia;
 	}

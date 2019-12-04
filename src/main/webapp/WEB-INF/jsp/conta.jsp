@@ -21,7 +21,7 @@
     </header>
     <div class="card">
         <div class="card-header">
-            Banco: ${conta.banco} | Agência: ${conta.agencia} - Conta: ${conta.numero}
+            Agência: ${conta.agencia} - Conta: ${conta.numero}
         </div>
         <div class="card-body">
             <h5 class="card-title">Bem vindo, ${conta.titular} </h5>

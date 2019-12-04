@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.math.BigDecimal;
-import java.text.Normalizer;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class TransacaoController {
     public String processoDeposito(@ModelAttribute("movForm") Movimentacao movimentacao,
                                    Map model) {
         Conta contaUpd = movimentacao.getConta();
-        String email = contaUpd.getEmail();
+//        String email = contaUpd.getEmail();
         BigDecimal novoSaldo = new BigDecimal(0);
         novoSaldo = novoSaldo.add(contaUpd.getSaldo());
         novoSaldo = novoSaldo.add(movimentacao.getValor());

@@ -33,12 +33,6 @@
             <form:input path="titular" class="form-control"></form:input>
         </div>
         <div class="form-group">
-            <label for="banco">
-                Banco:
-            </label>
-            <form:input path="banco" class="form-control"></form:input>
-        </div>
-        <div class="form-group">
             <label for="agencia">
                 Agência:
             </label>
