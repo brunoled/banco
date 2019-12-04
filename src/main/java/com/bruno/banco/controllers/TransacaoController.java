@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -118,6 +120,8 @@ public class TransacaoController {
         return "transferir";
     }
 
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @RequestMapping(value = "/transferir", method = RequestMethod.POST)
     public String processoTransferencia(@ModelAttribute("movForm") FormTransferencia movForm,
                                 Map model) {
@@ -126,34 +130,38 @@ public class TransacaoController {
         BigDecimal valor = movForm.getValor();
 
         if(contaEnvio.getSaldo().compareTo(movForm.getValor()) >= 0){
-            BigDecimal novoSaldo = contaEnvio.getSaldo().subtract(valor);
-            contaEnvio.setSaldo(novoSaldo);
+            if(contaReceb.getId() != contaEnvio.getId()) {
+                if(contaReceb.getId() != null) {
+                    BigDecimal novoSaldo = contaEnvio.getSaldo().subtract(valor);
+                    contaEnvio.setSaldo(novoSaldo);
 
-            novoSaldo = contaReceb.getSaldo().add(valor);
-            contaReceb.setSaldo(novoSaldo);
+                    novoSaldo = contaReceb.getSaldo().add(valor);
+                    contaReceb.setSaldo(novoSaldo);
 
-            contaRepository.save(contaEnvio);
-            contaRepository.save(contaReceb);
+                    contaRepository.save(contaEnvio);
+                    contaRepository.save(contaReceb);
 
-            //Salvando movimentacao na conta que enviou o dinheiro.
-            Movimentacao mov = new Movimentacao();
-            mov.setValor(valor);
-            mov.setConta(contaEnvio);
-            String descricao = "TRANSFERÊNCIA PARA " + contaReceb.getTitular();
-            mov.setDescricao(descricao);
-            mov.setTipoMovimentacao(TipoMovimentacao.SAIDA);
-            mov.setData(Calendar.getInstance());
-            movimentacaoRepository.save(mov);
+                    //Salvando movimentacao na conta que enviou o dinheiro.
+                    Movimentacao mov = new Movimentacao();
+                    mov.setValor(valor);
+                    mov.setConta(contaEnvio);
+                    String descricao = "TRANSFERÊNCIA PARA " + contaReceb.getTitular();
+                    mov.setDescricao(descricao);
+                    mov.setTipoMovimentacao(TipoMovimentacao.SAIDA);
+                    mov.setData(Calendar.getInstance());
+                    movimentacaoRepository.save(mov);
 
-            //Salvando movimentacao na conta que recebeu o dinheiro.
-            Movimentacao movR = new Movimentacao();
-            movR.setValor(valor);
-            movR.setConta(contaReceb);
-            descricao = "RECEBIMENTO VIA TRANSFERÊNCIA DE " + contaEnvio.getTitular();
-            movR.setDescricao(descricao);
-            movR.setTipoMovimentacao(TipoMovimentacao.ENTRADA);
-            movR.setData(Calendar.getInstance());
-            movimentacaoRepository.save(movR);
+                    //Salvando movimentacao na conta que recebeu o dinheiro.
+                    Movimentacao movR = new Movimentacao();
+                    movR.setValor(valor);
+                    movR.setConta(contaReceb);
+                    descricao = "RECEBIMENTO VIA TRANSFERÊNCIA DE " + contaEnvio.getTitular();
+                    movR.setDescricao(descricao);
+                    movR.setTipoMovimentacao(TipoMovimentacao.ENTRADA);
+                    movR.setData(Calendar.getInstance());
+                    movimentacaoRepository.save(movR);
+                }
+            }
         }
 
         return "redirect:/conta";
