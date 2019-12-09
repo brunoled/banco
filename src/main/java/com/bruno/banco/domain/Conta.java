@@ -13,7 +13,6 @@ public class Conta {
 	private Integer id;
 	private String titular;
 	private String numero;
-	private String banco;
 	private String agencia;
 	private String endereco;
 	private String email;

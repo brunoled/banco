@@ -13,5 +13,6 @@ public interface ContaRepository extends JpaRepository<Conta, Integer> {
     Conta findByEmail(String email);
     @Query("SELECT c from Conta c where c.id=?1")
     Conta findOne(Integer id);
+
 //    Conta findByBancoAndAgenciaAndNumero(String banco, String agencia, String numero);
 }
